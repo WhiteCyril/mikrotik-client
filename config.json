@@ -28,22 +28,17 @@
       },
       {
         "type": "field",
-        "domain": ["geosite:cn"],
+        "domain": ["domain:ru"],
         "outboundTag": "direct"
       },
       {
         "type": "field",
-        "domain": ["geosite:geolocation-!cn"],
+        "domain": ["domain!ru"],
         "outboundTag": "proxy"
       },
       {
         "type": "field",
-        "ip": ["223.5.5.5"],
-        "outboundTag": "direct"
-      },
-      {
-        "type": "field",
-        "ip": ["geoip:cn", "geoip:private"],
+        "ip": ["geoip:ru", "geoip:private"],
         "outboundTag": "direct"
       }
     ]
