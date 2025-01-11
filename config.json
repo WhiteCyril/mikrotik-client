@@ -10,18 +10,12 @@
     "servers": [
       {
         "address": "1.1.1.1",
-        "domains": ["geosite:geolocation-!cn"]
+        "domains": ["domain:!ru"]
       },
       {
-        "address": "223.5.5.5",
-        "domains": ["geosite:cn"],
-        "expectIPs": ["geoip:cn"]
-      },
-      {
-        "address": "114.114.114.114",
-        "domains": ["geosite:cn"]
-      },
-      "localhost"
+        "address": "localhost",
+        "domains": ["domain:ru"]
+      }
     ]
   },
   "routing": {
