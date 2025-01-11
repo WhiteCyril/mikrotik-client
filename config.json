@@ -1,3 +1,4 @@
+
 {
   "log": {
  //   "access": "/root/xray_log/access.log",  
@@ -9,12 +10,7 @@
   "dns": {
     "servers": [
       {
-        "address": "1.1.1.1",
-        "domains": ["domain:!ru"]
-      },
-      {
-        "address": "localhost",
-        "domains": ["domain:ru"]
+        "address": "localhost"
       }
     ]
   },
@@ -28,13 +24,8 @@
       },
       {
         "type": "field",
-        "domain": ["domain:ru"],
+        "domain": ["geosite:category-ru"],
         "outboundTag": "direct"
-      },
-      {
-        "type": "field",
-        "domain": ["domain!ru"],
-        "outboundTag": "proxy"
       },
       {
         "type": "field",
