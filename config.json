@@ -8,19 +8,36 @@
 
   // 2_Настройки DNS
   "dns": {
+  "hosts": { "cloudflare-dns.com": [ "1.1.1.1" ], "dns.google": [ "8.8.8.8" ], "dns.ru": [ "4.2.2.2" ] },
   //потом заменить на DOH
     "servers": [
       {
-        "address": "192.168.88.245",
+        "address": "https://cloudflare-dns.com/dns-query",
         "domains": ["geosite:facebook"]
       },
+	  {
+        "address": "https://cloudflare-dns.com/dns-query",
+        "domains": ["geosite:instagram"]
+      },
+	  {
+        "address": "https://dns.google/dns-query",
+        "domains": ["geosite:youtube"]
+      },
 	 {
-        "address": "192.168.88.245",
+        "address": "https://dns.google/dns-query",
         "domains": ["geosite:google"]
       },
 	  {
-        "address": "192.168.88.245",
+        "address": "https://dns.google/dns-query",
         "domains": ["geosite:twitter"]
+      },
+	  {
+        "address": "https://cloudflare-dns.com/dns-query",
+        "domains": ["geosite:category-vpnservices"]
+      },
+	  {
+        "address": "https://cloudflare-dns.com/dns-query",
+        "domains": ["geosite:category-anticensorship"]
       },
       "localhost"
     ]
@@ -35,22 +52,42 @@
       },
       {
         "type": "field",
-        "domain": ["geosite:cn"],
+        "domain": ["ru"],
         "outboundTag": "direct"
       },
       {
         "type": "field",
-        "domain": ["geosite:geolocation-!cn"],
+        "domain": ["geosite:facebook"],
+        "outboundTag": "proxy"
+      },
+	  {
+        "type": "field",
+        "domain": ["geosite:instagram"],
+        "outboundTag": "proxy"
+      },
+	  {
+        "type": "field",
+        "domain": ["geosite:youtube"],
+        "outboundTag": "proxy"
+      },
+	  {
+        "type": "field",
+        "domain": ["geosite:google"],
+        "outboundTag": "proxy"
+      },
+	  {
+        "type": "field",
+        "domain": ["geosite:category-vpnservices"],
+        "outboundTag": "proxy"
+      },
+	  {
+        "type": "field",
+        "domain": ["geosite:category-anticensorship"],
         "outboundTag": "proxy"
       },
       {
         "type": "field",
-        "ip": ["223.5.5.5"],
-        "outboundTag": "direct"
-      },
-      {
-        "type": "field",
-        "ip": ["geoip:cn", "geoip:private"],
+        "ip": ["geoip:ru", "geoip:private"],
         "outboundTag": "direct"
       }
     ]
@@ -76,6 +113,10 @@
     }
   ],
   "outbounds": [
+    {
+      "tag": "direct",
+      "protocol": "freedom"
+    },
     {
       "tag": "proxy",
       "protocol": "vless",
@@ -104,10 +145,6 @@
           "fingerprint": "chrome" 
         }
       }
-    },
-    {
-      "tag": "direct",
-      "protocol": "freedom"
     },
     {
       "tag": "block",
