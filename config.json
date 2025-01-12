@@ -51,6 +51,11 @@
         "domain": ["geosite:category-ads-all"],
         "outboundTag": "block"
       },
+	  {
+        "type": "field",
+        "protocol": ["bittorrent"],
+        "outboundTag": "direct"
+      }
       {
         "type": "field",
         "domain": ["ru"],
