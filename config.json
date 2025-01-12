@@ -1,6 +1,6 @@
-
 {
   "log": {
+ //Если раскомментить, то перестает слать логи в микротик,  а сохраняет по пути
  //   "access": "/root/xray_log/access.log",  
  //   "error": "/root/xray_log/error.log",   
     "loglevel": "warning"
@@ -8,10 +8,21 @@
 
   // 2_Настройки DNS
   "dns": {
+  //потом заменить на DOH
     "servers": [
       {
-        "address": "localhost"
-      }
+        "address": "192.168.88.245",
+        "domains": ["geosite:facebook"]
+      },
+	 {
+        "address": "192.168.88.245",
+        "domains": ["geosite:google"]
+      },
+	  {
+        "address": "192.168.88.245",
+        "domains": ["geosite:twitter"]
+      },
+      "localhost"
     ]
   },
   "routing": {
@@ -24,12 +35,22 @@
       },
       {
         "type": "field",
-        "domain": ["geosite:category-ru"],
+        "domain": ["geosite:cn"],
         "outboundTag": "direct"
       },
       {
         "type": "field",
-        "ip": ["geoip:ru", "geoip:private"],
+        "domain": ["geosite:geolocation-!cn"],
+        "outboundTag": "proxy"
+      },
+      {
+        "type": "field",
+        "ip": ["223.5.5.5"],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "ip": ["geoip:cn", "geoip:private"],
         "outboundTag": "direct"
       }
     ]
