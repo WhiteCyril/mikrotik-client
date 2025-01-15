@@ -55,7 +55,7 @@
         "type": "field",
         "protocol": ["bittorrent"],
         "outboundTag": "direct"
-      }
+      },
       {
         "type": "field",
         "domain": ["ru"],
@@ -135,7 +135,7 @@
       "settings": {
         "vnext": [
           {
-            "address": "vandersexxx.duckdns.org",
+            "address": "vandersex.online",
             "port": 443,
             "users": [
               {
@@ -152,9 +152,11 @@
         "network": "tcp",
         "security": "tls",
         "tlsSettings": {
-          "serverName": "vandersexxx.duckdns.org",
+          "serverName": "vandersex.online",
           "allowInsecure": false, // Запретить использование недоверенных сертификатов
-          "fingerprint": "chrome" 
+          "fingerprint": "chrome",
+	  "alpn": ["h2", "http/1.1"],
+	  "disableSessionResumption": true
         }
       }
     },
