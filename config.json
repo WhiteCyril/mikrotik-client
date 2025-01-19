@@ -1,8 +1,9 @@
+/etc/xray # cat config.json
 {
   "log": {
  //Если раскомментить, то перестает слать логи в микротик,  а сохраняет по пути
- //   "access": "/root/xray_log/access.log",  
- //   "error": "/root/xray_log/error.log",   
+ //   "access": "/root/xray_log/access.log",
+ //   "error": "/root/xray_log/error.log",
     "loglevel": "warning"
   },
 
@@ -10,32 +11,32 @@
   "dns": {
   "hosts": { "cloudflare-dns.com": [ "1.1.1.1" ], "dns.google": [ "8.8.8.8" ], "dns.ru": [ "4.2.2.2" ] },
     "servers": [
-	//очечные запросы ДНС, если не совпадает, то все берется с локалхоста контейнера
+        //очечные запросы ДНС, если не совпадает, то все берется с локалхоста контейнера
       {
         "address": "https://cloudflare-dns.com/dns-query",
         "domains": ["geosite:facebook"]
       },
-	  {
+          {
         "address": "https://cloudflare-dns.com/dns-query",
         "domains": ["geosite:instagram"]
       },
-	  {
+          {
         "address": "https://dns.google/dns-query",
         "domains": ["geosite:youtube"]
       },
-	 {
+         {
         "address": "https://dns.google/dns-query",
         "domains": ["geosite:google"]
       },
-	  {
+          {
         "address": "https://dns.google/dns-query",
         "domains": ["geosite:twitter"]
       },
-	  {
+          {
         "address": "https://cloudflare-dns.com/dns-query",
         "domains": ["geosite:category-vpnservices"]
       },
-	  {
+          {
         "address": "https://cloudflare-dns.com/dns-query",
         "domains": ["geosite:category-anticensorship"]
       },
@@ -45,13 +46,13 @@
   "routing": {
     "domainStrategy": "IPIfNonMatch",
     "rules": [
-	 //точная маршрутизация, вначале блокируется реклама, потом точечная маршрутизация, и прямой доступ без прокси, т.е. в чебурнет
+         //точная маршрутизация, вначале блокируется реклама, потом точечная маршрутизация, и прямой доступ без прокси, т.е. в чебурнет
       {
         "type": "field",
         "domain": ["geosite:category-ads-all"],
         "outboundTag": "block"
       },
-	  {
+          {
         "type": "field",
         "protocol": ["bittorrent"],
         "outboundTag": "direct"
@@ -61,7 +62,7 @@
         "domain": ["ru"],
         "outboundTag": "direct"
       },
-	  {
+          {
         "type": "field",
         "ip": ["geoip:ru"],
         "outboundTag": "direct"
@@ -71,27 +72,27 @@
         "domain": ["geosite:facebook"],
         "outboundTag": "proxy"
       },
-	  {
+          {
         "type": "field",
         "domain": ["geosite:instagram"],
         "outboundTag": "proxy"
       },
-	  {
+          {
         "type": "field",
         "domain": ["geosite:youtube"],
         "outboundTag": "proxy"
       },
-	  {
+          {
         "type": "field",
         "domain": ["geosite:google"],
         "outboundTag": "proxy"
       },
-	  {
+          {
         "type": "field",
         "domain": ["geosite:category-vpnservices"],
         "outboundTag": "proxy"
       },
-	  {
+          {
         "type": "field",
         "domain": ["geosite:category-anticensorship"],
         "outboundTag": "proxy"
@@ -106,7 +107,25 @@
 
   // 4_Настройки входящих подключений, как мы будем принимать трафик локально
   "inbounds": [
-    {
+          {
+        "tag": "tun",
+        "port": 666,
+        "protocol": "dokodemo-door",
+        "settings": {
+        "network": "tcp,udp",
+        "followRedirect": true
+          },
+          "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      },
+      "streamSettings": {
+        "sockopt": {
+          "tproxy": "tproxy"
+        }
+      }
+    },
+        {
       "tag": "socks-in",
       "protocol": "socks",
       "listen": "172.17.0.2", // Адрес, на котором будет слушать SOCKS5-сервер
@@ -119,7 +138,7 @@
     {
       "tag": "http-in",
       "protocol": "http",
-      "listen": "172.17.0.2", 
+      "listen": "172.17.0.2",
       "port": 10801
     }
   ],
@@ -130,35 +149,33 @@
       "protocol": "freedom"
     },
     {
-      "tag": "proxy",
-      "protocol": "vless",
+        "protocol": "vless",
       "settings": {
         "vnext": [
           {
-            "address": "vandersex.online",
+            "address": "91.201.114.20",
             "port": 443,
             "users": [
               {
-                "id": "1d192285-73f9-4fbe-825a-aa49f9d357d5", 
-                "flow": "xtls-rprx-vision",
+                "id": "c7549881-a970-4ef9-87eb-da58b8ad08a0",
                 "encryption": "none",
-                "level": 0
+                "flow": "xtls-rprx-vision"
               }
             ]
           }
         ]
-      },
-      "streamSettings": {
+    },
+        "streamSettings": {
         "network": "tcp",
-        "security": "tls",
-        "tlsSettings": {
-          "serverName": "vandersex.online",
-          "allowInsecure": false, // Запретить использование недоверенных сертификатов
-          "fingerprint": "chrome",
-	  "alpn": ["h2", "http/1.1"],
-	  "disableSessionResumption": true
+        "security": "reality",
+        "realitySettings": {
+        "fingerprint": "chrome",
+        "serverName": "www.radio-nederland.nl",
+        "publicKey": "iml5oUjOaFTIeqCzQEbo77IVYdOiRnDXgwM4zu9sbiU",
+        "shortId": "13c97c36598f0d8a"
         }
-      }
+      },
+      "tag": "proxy"
     },
     {
       "tag": "block",
