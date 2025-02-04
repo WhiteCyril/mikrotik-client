@@ -1,42 +1,39 @@
-/etc/xray # cat config.json
 {
   "log": {
  //Если раскомментить, то перестает слать логи в микротик,  а сохраняет по пути
- //   "access": "/root/xray_log/access.log",
- //   "error": "/root/xray_log/error.log",
+ //   "access": "/root/xray_log/access.log",  
+ //   "error": "/root/xray_log/error.log",   
     "loglevel": "warning"
   },
-
-  // 2_Настройки DNS
   "dns": {
   "hosts": { "cloudflare-dns.com": [ "1.1.1.1" ], "dns.google": [ "8.8.8.8" ], "dns.ru": [ "4.2.2.2" ] },
     "servers": [
-        //очечные запросы ДНС, если не совпадает, то все берется с локалхоста контейнера
+	//очечные запросы ДНС, если не совпадает, то все берется с локалхоста контейнера
       {
         "address": "https://cloudflare-dns.com/dns-query",
         "domains": ["geosite:facebook"]
       },
-          {
+	  {
         "address": "https://cloudflare-dns.com/dns-query",
         "domains": ["geosite:instagram"]
       },
-          {
+	  {
         "address": "https://dns.google/dns-query",
         "domains": ["geosite:youtube"]
       },
-         {
+	 {
         "address": "https://dns.google/dns-query",
         "domains": ["geosite:google"]
       },
-          {
+	  {
         "address": "https://dns.google/dns-query",
         "domains": ["geosite:twitter"]
       },
-          {
+	  {
         "address": "https://cloudflare-dns.com/dns-query",
         "domains": ["geosite:category-vpnservices"]
       },
-          {
+	  {
         "address": "https://cloudflare-dns.com/dns-query",
         "domains": ["geosite:category-anticensorship"]
       },
@@ -46,13 +43,19 @@
   "routing": {
     "domainStrategy": "IPIfNonMatch",
     "rules": [
-         //точная маршрутизация, вначале блокируется реклама, потом точечная маршрутизация, и прямой доступ без прокси, т.е. в чебурнет
-      {
+	 //точная маршрутизация, вначале блокируется реклама, потом точечная маршрутизация, и прямой доступ без прокси, т.е. в чебурнет
+       {
+        "type": "field",
+        "inboundTag": ["run"],
+        "port": 53,
+        "outboundTag": "proxy"
+      },
+	 {
         "type": "field",
         "domain": ["geosite:category-ads-all"],
         "outboundTag": "block"
       },
-          {
+	  {
         "type": "field",
         "protocol": ["bittorrent"],
         "outboundTag": "direct"
@@ -62,7 +65,7 @@
         "domain": ["ru"],
         "outboundTag": "direct"
       },
-          {
+	  {
         "type": "field",
         "ip": ["geoip:ru"],
         "outboundTag": "direct"
@@ -70,32 +73,52 @@
       {
         "type": "field",
         "domain": ["geosite:facebook"],
-        "outboundTag": "proxy"
+        "outboundTag": "xhttp"
       },
-          {
+	  {
         "type": "field",
         "domain": ["geosite:instagram"],
-        "outboundTag": "proxy"
+        "outboundTag": "xhttp"
       },
-          {
+	  {
         "type": "field",
         "domain": ["geosite:youtube"],
-        "outboundTag": "proxy"
+        "outboundTag": "xhttp"
+       },
+	   {
+        "type": "field",
+        "domain": ["speedtest.net"],
+        "outboundTag": "xhttp"
       },
-          {
+	   {
+        "type": "field",
+        "domain": ["gcore.com"],
+        "outboundTag": "xhttp"
+      },
+      {
+        "type": "field",
+        "domain": ["phoenixnap.com"],
+        "outboundTag": "xhttp"
+      },	 
+	  {
+        "type": "field",
+        "domain": ["geosite:category-porn"],
+        "outboundTag": "xhttp"
+      },
+	  {
         "type": "field",
         "domain": ["geosite:google"],
-        "outboundTag": "proxy"
+        "outboundTag": "xhttp"
       },
-          {
+	  {
         "type": "field",
         "domain": ["geosite:category-vpnservices"],
-        "outboundTag": "proxy"
+        "outboundTag": "xhttp"
       },
-          {
+	  {
         "type": "field",
         "domain": ["geosite:category-anticensorship"],
-        "outboundTag": "proxy"
+        "outboundTag": "xhttp"
       },
       {
         "type": "field",
@@ -104,52 +127,30 @@
       }
     ]
   },
-
-  // 4_Настройки входящих подключений, как мы будем принимать трафик локально
   "inbounds": [
-          {
-        "tag": "tun",
-        "port": 666,
-        "protocol": "dokodemo-door",
-        "settings": {
-        "network": "tcp,udp",
-        "followRedirect": true
-          },
-          "sniffing": {
-        "enabled": true,
-        "destOverride": ["http", "tls"]
-      },
-      "streamSettings": {
-        "sockopt": {
-          "tproxy": "tproxy"
-        }
-      }
-    },
-        {
+	{
       "tag": "socks-in",
       "protocol": "socks",
-      "listen": "172.17.0.2", // Адрес, на котором будет слушать SOCKS5-сервер
-      "port": 10800, // Порт, на котором будет слушать SOCKS5-сервер
+      "listen": "172.17.0.2",
+      "port": 10800,
       "settings": {
         "udp": true
       }
     },
-    // 4.2 Некоторые приложения не поддерживают SOCKS. Для них можно использовать HTTP-прокси
     {
       "tag": "http-in",
       "protocol": "http",
-      "listen": "172.17.0.2",
+      "listen": "172.17.0.2", 
       "port": 10801
     }
   ],
   "outbounds": [
-  //Вначале direct, потому что если что-то непонятно, то xray всегда направляет на первeую секцию outbounds
     {
       "tag": "direct",
       "protocol": "freedom"
     },
     {
-        "protocol": "vless",
+	"protocol": "vless",
       "settings": {
         "vnext": [
           {
@@ -170,13 +171,94 @@
         "security": "reality",
         "realitySettings": {
         "fingerprint": "chrome",
-        "serverName": "www.radio-nederland.nl",
+        "serverName": "radio-nederland.nl",
         "publicKey": "iml5oUjOaFTIeqCzQEbo77IVYdOiRnDXgwM4zu9sbiU",
         "shortId": "13c97c36598f0d8a"
         }
       },
       "tag": "proxy"
     },
+	{
+	"protocol": "vless",
+      "settings": {
+			"vnext": [
+			{
+				"address": "www.vandersex.online",
+				"port": 443,
+				"users": [
+					{
+						"id": "08a87282-5f4e-4a3f-b0d6-e27353f0a852",
+						"encryption": "none",
+						"level": 0
+					}
+				]
+			}
+			]
+	  },
+	  "tag": "xhttp",
+	  "streamSettings": {
+		"network": "xhttp",
+        "security": "tls",
+		"tlsSettings": {
+			"serverName": "vandersex.online",
+			"allowInsecure": false,
+			"alpn": ["h2"],
+			"fingerprint": "chrome"
+		},
+		"xhttpSettings": {
+			"host": "www.vandersex.online",
+			"path": "/video_live_stream",
+			"mode": "packet-up", 
+			"extra": {
+		//	//	"noGRPCHeader": false,
+		//		"scMaxEachPostBytes": 1000000,
+		//		"scMinPostsIntervalMs": 30,
+		//		"xPaddingBytes": "100-1000",
+		//		"xmux": { 
+		//			"maxConcurrency": "16-32",
+		//			"maxConnections": 0,
+		//			"cMaxReuseTimes": "64-128",
+		//			"cMaxLifetimeMs": 0,
+		//			"hMaxRequestTimes": "800-900"
+		//		}
+				//"downloadSettings": {
+				//	"address": "vandersex.com",
+				//	"port": 443,
+				//	"network": "xhttp",
+				//	"security": "tls",
+				//	"tlsSettings": {
+				//		"serverName": "vandersex.online",
+				//		"allowInsecure": false,
+				//		"alpn": ["h2"],
+				//		"fingerprint": "chrome"
+				//	},
+				//	"xhttpSettings": {
+				//		"host": "vandersex.online",
+				//		"path": "/video_live_stream",
+				//		"mode": "auto", 
+				//		"extra": {
+				//			"scMaxEachPostBytes": 1000000,
+				//			"scMinPostsIntervalMs": 30,
+				//			"xPaddingBytes": "100-1000",
+				//			"xmux": { 
+				//				"maxConcurrency": "16-32",
+				//				"maxConnections": 0,
+				//				"cMaxReuseTimes": "64-128",
+				//				"cMaxLifetimeMs": 0,
+				//				"hMaxRequestTimes": "800-900"
+				//			}
+				//		}
+				//	}
+				//}
+			}
+		},
+		"sockopt": {
+		  "tcpFastOpen": true,
+          "tcpMptcp": true,
+          "tcpNoDelay": true
+		}
+	  }
+	},
     {
       "tag": "block",
       "protocol": "blackhole"
