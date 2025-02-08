@@ -73,52 +73,57 @@
       {
         "type": "field",
         "domain": ["geosite:facebook"],
-        "outboundTag": "xhttp"
+        "outboundTag": "xhttp_stream1"
       },
 	  {
         "type": "field",
         "domain": ["geosite:instagram"],
-        "outboundTag": "xhttp"
+        "outboundTag": "xhttp_stream1"
       },
 	  {
         "type": "field",
         "domain": ["geosite:youtube"],
-        "outboundTag": "xhttp"
+        "outboundTag": "xhttp_stream1"
+       },
+	   	{
+        "type": "field",
+        "domain": ["24video.porn"],
+        "outboundTag": "xhttp_stream1"
        },
 	   {
         "type": "field",
         "domain": ["speedtest.net"],
-        "outboundTag": "xhttp"
+        "outboundTag": "xhttp_stream1"
       },
 	   {
         "type": "field",
         "domain": ["gcore.com"],
-        "outboundTag": "xhttp"
+        "outboundTag": "xhttp_stream1"
       },
       {
         "type": "field",
         "domain": ["phoenixnap.com"],
-        "outboundTag": "xhttp"
+        "outboundTag": "xhttp_stream1"
       },	 
 	  {
         "type": "field",
         "domain": ["geosite:category-porn"],
-        "outboundTag": "xhttp"
+        "outboundTag": "xhttp_stream1"
       },
 	  {
         "type": "field",
         "domain": ["geosite:google"],
-        "outboundTag": "xhttp"
+        "outboundTag": "xhttp_stream1"
       },
 	  {
         "type": "field",
         "domain": ["geosite:category-vpnservices"],
-        "outboundTag": "xhttp"
+        "outboundTag": "xhttp_stream1"
       },
 	  {
         "type": "field",
         "domain": ["geosite:category-anticensorship"],
-        "outboundTag": "xhttp"
+        "outboundTag": "xhttp_stream1"
       },
       {
         "type": "field",
@@ -176,7 +181,7 @@
         "shortId": "13c97c36598f0d8a"
         }
       },
-      "tag": "proxy"
+      "tag": "reality"
     },
 	{
 	"protocol": "vless",
@@ -195,67 +200,148 @@
 			}
 			]
 	  },
-	  "tag": "xhttp",
-	  "streamSettings": {
-		"network": "xhttp",
-        "security": "tls",
-		"tlsSettings": {
-			"serverName": "vandersex.online",
-			"allowInsecure": false,
-			"alpn": ["h2"],
-			"fingerprint": "chrome"
-		},
-		"xhttpSettings": {
-			"host": "www.vandersex.online",
-			"path": "/video_live_stream",
-			"mode": "packet-up", 
-			"extra": {
-		//	//	"noGRPCHeader": false,
-		//		"scMaxEachPostBytes": 1000000,
-		//		"scMinPostsIntervalMs": 30,
-		//		"xPaddingBytes": "100-1000",
-		//		"xmux": { 
-		//			"maxConcurrency": "16-32",
-		//			"maxConnections": 0,
-		//			"cMaxReuseTimes": "64-128",
-		//			"cMaxLifetimeMs": 0,
-		//			"hMaxRequestTimes": "800-900"
-		//		}
-				//"downloadSettings": {
-				//	"address": "vandersex.com",
-				//	"port": 443,
-				//	"network": "xhttp",
-				//	"security": "tls",
-				//	"tlsSettings": {
-				//		"serverName": "vandersex.online",
-				//		"allowInsecure": false,
-				//		"alpn": ["h2"],
-				//		"fingerprint": "chrome"
-				//	},
-				//	"xhttpSettings": {
-				//		"host": "vandersex.online",
-				//		"path": "/video_live_stream",
-				//		"mode": "auto", 
-				//		"extra": {
-				//			"scMaxEachPostBytes": 1000000,
-				//			"scMinPostsIntervalMs": 30,
-				//			"xPaddingBytes": "100-1000",
-				//			"xmux": { 
-				//				"maxConcurrency": "16-32",
-				//				"maxConnections": 0,
-				//				"cMaxReuseTimes": "64-128",
-				//				"cMaxLifetimeMs": 0,
-				//				"hMaxRequestTimes": "800-900"
-				//			}
-				//		}
-				//	}
-				//}
+	  "tag": "xhttp_stream1",
+		"streamSettings": {
+			"network": "xhttp",
+			"security": "tls",
+			"tlsSettings": {
+				"serverName": "vandersex.online",
+				"allowInsecure": false,
+				"alpn": ["h2"],
+				"fingerprint": "chrome"
+			},
+			"xhttpSettings": {
+				"host": "www.vandersex.online",
+				"path": "/video_live_stream",
+				"mode": "packet-up", 
+				"extra": {
+					"noGRPCHeader": false,
+					"scMaxEachPostBytes": 1000000,
+					"scMinPostsIntervalMs": 30,
+					"xPaddingBytes": "100-1000",
+					"xmux": { 
+						"maxConcurrency": "16-32",
+						"maxConnections": 0,
+						"cMaxReuseTimes": "64-128",
+						"cMaxLifetimeMs": 0,
+						"hMaxRequestTimes": "800-900"
+					},
+				"downloadSettings": {
+					"address": "vandersex.com",
+					"port": 443,
+					"network": "xhttp",
+					"security": "tls",
+					"tlsSettings": {
+						"serverName": "vandersex.com",
+						"allowInsecure": false,
+						"alpn": ["h2"],
+						"fingerprint": "chrome"
+					},
+					"xhttpSettings": {
+						"host": "vandersex.com",
+						"path": "/video_live_stream",
+						"mode": "packet-up", 
+						"extra": {
+							"scMaxEachPostBytes": 1000000,
+							"scMinPostsIntervalMs": 30,
+							"xPaddingBytes": "100-1000",
+							"xmux": { 
+								"maxConcurrency": "16-32",
+								"maxConnections": 0,
+								"cMaxReuseTimes": "64-128",
+								"cMaxLifetimeMs": 0,
+								"hMaxRequestTimes": "800-900"
+							}
+						}
+					}
+				}
+			},
+			"sockopt": {
+				"tcpFastOpen": true,
+				"tcpMptcp": true,
+				"tcpNoDelay": true
 			}
-		},
-		"sockopt": {
-		  "tcpFastOpen": true,
-          "tcpMptcp": true,
-          "tcpNoDelay": true
+		}
+	  }
+	},
+	{
+	"protocol": "vless",
+      "settings": {
+			"vnext": [
+			{
+				"address": "www.vandersex.com",
+				"port": 443,
+				"users": [
+					{
+						"id": "08a87282-5f4e-4a3f-b0d6-e27353f0a852",
+						"encryption": "none",
+						"level": 0
+					}
+				]
+			}
+			]
+	  },
+	  "tag": "xhttp_stream2",
+		"streamSettings": {
+			"network": "xhttp",
+			"security": "tls",
+			"tlsSettings": {
+				"serverName": "vandersex.com",
+				"allowInsecure": false,
+				"alpn": ["h2"],
+				"fingerprint": "chrome"
+			},
+			"xhttpSettings": {
+				"host": "www.vandersex.com",
+				"path": "/video_live_stream",
+				"mode": "packet-up", 
+				"extra": {
+					"noGRPCHeader": false,
+					"scMaxEachPostBytes": 1000000,
+					"scMinPostsIntervalMs": 30,
+					"xPaddingBytes": "100-1000",
+					"xmux": { 
+						"maxConcurrency": "16-32",
+						"maxConnections": 0,
+						"cMaxReuseTimes": "64-128",
+						"cMaxLifetimeMs": 0,
+						"hMaxRequestTimes": "800-900"
+					},
+				"downloadSettings": {
+					"address": "vandersex.online",
+					"port": 443,
+					"network": "xhttp",
+					"security": "tls",
+					"tlsSettings": {
+						"serverName": "vandersex.online",
+						"allowInsecure": false,
+						"alpn": ["h2"],
+						"fingerprint": "chrome"
+					},
+					"xhttpSettings": {
+						"host": "vandersex.online",
+						"path": "/video_live_stream",
+						"mode": "packet-up", 
+						"extra": {
+							"scMaxEachPostBytes": 1000000,
+							"scMinPostsIntervalMs": 30,
+							"xPaddingBytes": "100-1000",
+							"xmux": { 
+								"maxConcurrency": "16-32",
+								"maxConnections": 0,
+								"cMaxReuseTimes": "64-128",
+								"cMaxLifetimeMs": 0,
+								"hMaxRequestTimes": "800-900"
+							}
+						}
+					}
+				}
+			},
+			"sockopt": {
+				"tcpFastOpen": true,
+				"tcpMptcp": true,
+				"tcpNoDelay": true
+			}
 		}
 	  }
 	},
