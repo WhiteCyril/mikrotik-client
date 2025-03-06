@@ -6,155 +6,260 @@
     "loglevel": "warning"
   },
   "dns": {
-  "hosts": { "cloudflare-dns.com": [ "1.1.1.1" ], "dns.google": [ "8.8.8.8" ], "dns.ru": [ "4.2.2.2" ] },
-    "servers": [
-	//очечные запросы ДНС, если не совпадает, то все берется с локалхоста контейнера
-      {
-        "address": "https://cloudflare-dns.com/dns-query",
-        "domains": ["geosite:facebook"]
-      },
-	  {
-        "address": "https://cloudflare-dns.com/dns-query",
-        "domains": ["geosite:instagram"]
-      },
-	  {
-        "address": "https://dns.google/dns-query",
-        "domains": ["geosite:youtube"]
-      },
-	 {
-        "address": "https://dns.google/dns-query",
-        "domains": ["geosite:google"]
-      },
-	  {
-        "address": "https://dns.google/dns-query",
-        "domains": ["geosite:twitter"]
-      },
-	  {
-        "address": "https://cloudflare-dns.com/dns-query",
-        "domains": ["geosite:category-vpnservices"]
-      },
-	  {
-        "address": "https://cloudflare-dns.com/dns-query",
-        "domains": ["geosite:category-anticensorship"]
-      },
-      "localhost"
-    ]
-  },
+		"hosts": { 
+			"cloudflare-dns.com": [ "1.1.1.1" ], 
+			"dns.google": [ "8.8.8.8" ]
+		},
+		"servers": [
+		{
+			"address": "https://cloudflare-dns.com/dns-query",
+			"domains": ["geosite:facebook"]
+		},
+		{
+			"address": "https://cloudflare-dns.com/dns-query",
+			"domains": ["geosite:instagram"]
+		},
+		{
+			"address": "https://dns.google/dns-query",
+			"domains": ["geosite:youtube"]
+		},
+		{
+			"address": "https://dns.google/dns-query",
+			"domain": ["domain:xhamster.com"]
+		},
+		{
+			"address": "https://dns.google/dns-query",
+			"domains": ["geosite:google"]
+		},
+		{
+			"address": "https://dns.google/dns-query",
+			"domains": ["geosite:twitter"]
+		},
+		{
+			"address": "https://cloudflare-dns.com/dns-query",
+			"domains": ["geosite:category-vpnservices"]
+		},
+		{
+			"address": "https://cloudflare-dns.com/dns-query",
+			"domains": ["geosite:category-anticensorship"]
+		},
+		{
+			"address": "https://cloudflare-dns.com/dns-query",
+			"domains": ["domain:com"]
+		},
+		{
+			"address": "https://cloudflare-dns.com/dns-query",
+			"domains": ["domain:io"]
+		},
+		"localhost"
+		],
+		"queryStrategy": "UseIPv4"
+	},
   "routing": {
-    "domainStrategy": "IPIfNonMatch",
-    "rules": [
-	 //точная маршрутизация, вначале блокируется реклама, потом точечная маршрутизация, и прямой доступ без прокси, т.е. в чебурнет
-       {
-        "type": "field",
-        "inboundTag": ["run"],
-        "port": 53,
-        "outboundTag": "proxy"
-      },
-	 {
-        "type": "field",
-        "domain": ["geosite:category-ads-all"],
-        "outboundTag": "block"
-      },
-	  {
-        "type": "field",
-        "protocol": ["bittorrent"],
-        "outboundTag": "direct"
-      },
-      {
-        "type": "field",
-        "domain": ["ru"],
-        "outboundTag": "direct"
-      },
-	  {
-        "type": "field",
-        "ip": ["geoip:ru"],
-        "outboundTag": "direct"
-      },
-      {
-        "type": "field",
-        "domain": ["geosite:facebook"],
-        "outboundTag": "xhttp_stream1"
-      },
-	  {
-        "type": "field",
-        "domain": ["geosite:instagram"],
-        "outboundTag": "xhttp_stream1"
-      },
-	  {
-        "type": "field",
-        "domain": ["geosite:youtube"],
-        "outboundTag": "xhttp_stream1"
-       },
-	   	{
-        "type": "field",
-        "domain": ["24video.porn"],
-        "outboundTag": "xhttp_stream1"
-       },
-	   {
-        "type": "field",
-        "domain": ["speedtest.net"],
-        "outboundTag": "xhttp_stream1"
-      },
-	   {
-        "type": "field",
-        "domain": ["gcore.com"],
-        "outboundTag": "xhttp_stream1"
-      },
-      {
-        "type": "field",
-        "domain": ["phoenixnap.com"],
-        "outboundTag": "xhttp_stream1"
-      },	 
-	  {
-        "type": "field",
-        "domain": ["geosite:category-porn"],
-        "outboundTag": "xhttp_stream1"
-      },
-	  {
-        "type": "field",
-        "domain": ["geosite:google"],
-        "outboundTag": "xhttp_stream1"
-      },
-	  {
-        "type": "field",
-        "domain": ["geosite:category-vpnservices"],
-        "outboundTag": "xhttp_stream1"
-      },
-	  {
-        "type": "field",
-        "domain": ["geosite:category-anticensorship"],
-        "outboundTag": "xhttp_stream1"
-      },
-      {
-        "type": "field",
-        "ip": ["geoip:ru", "geoip:private"],
-        "outboundTag": "direct"
-      }
-    ]
-  },
+		"domainStrategy": "IPOnDemand",
+		"balancers": [ 
+		{ 
+			"tag": "balancer", 
+			"selector": [ "xhttp_stream" ], 
+			"strategy": { 
+				"type": "leastPing" 
+			}
+		} 
+		],
+		"rules": [
+		{
+			"type": "field",
+			"ip": ["geoip:ru", "geoip:private"],
+			"outboundTag": "direct"
+		},
+	//	 {
+     //   "type": "field",
+      //  "inboundTag": ["dns-in"],
+      //  "port": 53,
+      //  "outboundTag": "dns-out"
+     // },
+	//	{
+	//		"type": "field",
+	//		"inboundTag": ["dns-in"],
+	//		"network": "tcp,udp",
+	//		"balancerTag": "balancer"
+	//	},
+		{
+			"type": "field",
+			"ip": ["geoip:ru"],
+			"outboundTag": "direct"
+		},
+		{
+			"type": "field",
+			"domain": ["geosite:category-ads-all"],
+			"outboundTag": "block"
+		},
+		{
+			"type": "field",
+			"protocol": ["bittorrent"],
+			"outboundTag": "direct"
+		},
+		{
+			"type": "field",
+			"domain": ["domain:ru"],
+			"outboundTag": "direct"
+		},
+		{
+			"type": "field",
+			"domain": ["domain:cloudflare-dns.com"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["domain:pornhub.com"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["domain:xhamster.com"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["domain:cloudflare.com"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["geosite:facebook"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["domain:ooklaserver.net"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["geosite:instagram"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"inboundTag": ["tun-in"],
+			"domain": ["geosite:youtube"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["domain:speedtest.net"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["domain:gcore.com"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["domain:phoenixnap.com"],
+			"balancerTag": "balancer"
+		},	 
+		{
+			"type": "field",
+			"domain": ["domain:fastly.com"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["domain:digitalocean.com"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["geosite:google"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["domain:google.com"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["geosite:category-vpnservices"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["geosite:category-anticensorship"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["domain:docker.io"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["domain:docker.com"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"domain": ["domain:web.archive.org"],
+			"balancerTag": "balancer"
+		},
+		{
+			"type": "field",
+			"inboundTag": "tun-in",
+			"balancerTag": "balancer"
+		},
+		{ 
+			"port": "0-65535", 
+			"outboundTag": "direct" 
+		}
+	  ]
+	},
   "inbounds": [
 	{
       "tag": "socks-in",
       "protocol": "socks",
       "listen": "172.17.0.2",
       "port": 10800,
-      "settings": {
-        "udp": true
-      }
+	  	"sniffing": {
+			"enabled": true,
+			"destOverride": ["http", "tls"],
+			"metadataOnly": false,
+			"routeOnly": true
+		}
     },
     {
       "tag": "http-in",
       "protocol": "http",
       "listen": "172.17.0.2", 
       "port": 10801
-    }
+    },
+	{
+		"listen": "172.17.0.2",
+		"tag": "dns-in",
+		"port": 53,
+		"protocol": "dokodemo-door",
+		"network": "udp,tcp",
+//		"settings": {
+//			"network": "tcp,udp",
+//			"address": "8.8.8.8",
+//			 "port": 53,
+ //             "network": "tcp,udp"
+			//"followRedirect": true
+//		},
+		"sniffing": {
+			"enabled": true,
+			"destOverride": ["http", "tls"]	
+		}
+	}
   ],
   "outbounds": [
     {
       "tag": "direct",
       "protocol": "freedom"
     },
-    {
+	  {
 	"protocol": "vless",
       "settings": {
         "vnext": [
@@ -192,7 +297,7 @@
 				"port": 443,
 				"users": [
 					{
-						"id": "08a87282-5f4e-4a3f-b0d6-e27353f0a852",
+						"id": "4ffc7e8d-5e95-4749-933f-48eb9a46e671",
 						"encryption": "none",
 						"level": 0
 					}
@@ -273,7 +378,7 @@
 				"port": 443,
 				"users": [
 					{
-						"id": "08a87282-5f4e-4a3f-b0d6-e27353f0a852",
+						"id": "4ffc7e8d-5e95-4749-933f-48eb9a46e671",
 						"encryption": "none",
 						"level": 0
 					}
@@ -345,9 +450,19 @@
 		}
 	  }
 	},
+	{
+      "protocol": "dns",
+      "tag": "dns-out"
+    },
     {
       "tag": "block",
       "protocol": "blackhole"
     }
-  ]
+  ],
+   "observatory": {
+    "subjectSelector": [ "xhttp_stream" ],
+    "probeUrl": "https://www.google.com/generate_204",
+    "probeInterval": "66s", 
+	"enableConcurrency": false
+  }
 }
